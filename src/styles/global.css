@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --font-sans: 'Nunito', 'HarmonyOS Sans SC', sans-serif;
+
+  --color-sky-50: #FDFCF5;
+  --color-sky-100: #E0F7FA;
+  --color-sky-200: #B2EBF2;
+  --color-sky-300: #80DEEA;
+  --color-sky-400: #4DD0E1;
+  --color-sky-500: #26C6DA;
+  --color-sky-600: #00BCD4;
+  --color-sky-700: #00ACC1;
+  --color-sky-800: #0097A7;
+  --color-sky-900: #00838F;
+
+  --color-candle-50: #FFF8E1;
+  --color-candle-100: #FFECB3;
+  --color-candle-200: #FFE082;
+  --color-candle-300: #FFD54F;
+  --color-candle-400: #FFCA28;
+  --color-candle-500: #FFC107;
+  --color-candle-600: #FFB300;
+  --color-candle-700: #FFA000;
+  --color-candle-800: #FF8F00;
+  --color-candle-900: #FF6F00;
+
+  --color-dusk-50: #FCE4EC;
+  --color-dusk-100: #F8BBD0;
+  --color-dusk-200: #F48FB1;
+  --color-dusk-300: #F06292;
+  --color-dusk-400: #EC407A;
+  --color-dusk-500: #E91E63;
+  --color-dusk-600: #D81B60;
+  --color-dusk-700: #C2185B;
+  --color-dusk-800: #AD1457;
+  --color-dusk-900: #880E4F;
+
+  --color-night-50: #ECEFF1;
+  --color-night-100: #CFD8DC;
+  --color-night-200: #B0BEC5;
+  --color-night-300: #90A4AE;
+  --color-night-400: #78909C;
+  --color-night-500: #607D8B;
+  --color-night-600: #546E7A;
+  --color-night-700: #455A64;
+  --color-night-800: #37474F;
+  --color-night-900: #263238;
+
+  /* 新增：暗色模式主色，取自你那个参考 HTML 的蓝紫渐变 */
+  --color-abyss-50:  #EEF1F8;
+  --color-abyss-100: #D7DEEF;
+  --color-abyss-200: #AFC0DF;
+  --color-abyss-300: #8AA1D3;
+  --color-abyss-400: #6B8AD0;
+  --color-abyss-500: #4B6CB7;
+  --color-abyss-600: #3D5899;
+  --color-abyss-700: #2F447A;
+  --color-abyss-800: #22315C;
+  --color-abyss-900: #182848;
+  --color-abyss-950: #0F1B33;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-sky-50);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-sky-200); border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-sky-300);
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: var(--color-abyss-900);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: var(--color-abyss-600);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-abyss-500);
+}
+
+/* 简单的浮动动画 */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}

@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={`${t('404.title')} | Zhiyu344`}>
+    <div class="relative overflow-hidden min-h-[70vh] flex items-center justify-center">
+        <div class="absolute inset-0 -z-20 bg-sky-50 dark:bg-abyss-950 transition-colors duration-500"></div>
+        <div class="absolute inset-0 -z-20 bg-gradient-to-br from-abyss-950 via-abyss-900 to-abyss-800 opacity-0 dark:opacity-100 transition-opacity duration-500"></div>
+
+        <div class="absolute top-10 left-10 w-72 h-72 bg-sky-300/40 dark:bg-abyss-400/50 rounded-full filter blur-3xl animate-float"></div>
+        <div class="absolute bottom-10 right-10 w-72 h-72 bg-candle-300/40 dark:bg-abyss-300/40 rounded-full filter blur-3xl animate-float" style="animation-delay: 2s;"></div>
+
+        <div class="relative text-center px-4">
+            <p class="text-8xl font-extrabold text-candle-400 dark:text-abyss-300">404</p>
+            <h1 class="mt-4 text-2xl font-bold text-night-900 dark:text-sky-50" data-i18n-key="404.title">
+                {t('404.title')}
+            </h1>
+            <p class="mt-2 text-night-600 dark:text-abyss-200 max-w-sm mx-auto" data-i18n-key="404.message">
+                {t('404.message')}
+            </p>
+            <a
+                href="/"
+                id="notfound-home-link"
+                class="inline-block mt-8 px-6 py-3 rounded-full bg-candle-500 dark:bg-abyss-500 text-white font-medium hover:bg-candle-600 dark:hover:bg-abyss-400 transition-colors"
+                data-i18n-key="404.backHome"
+            >
+                {t('404.backHome')}
+            </a>
+        </div>
+    </div>
+</BaseLayout>
+
+<script>
+    const homeLink = document.getElementById('notfound-home-link') as HTMLAnchorElement | null;
+    const path = window.location.pathname;
+    const currentLang = path.startsWith('/zh-hant') ? 'zh-hant' : path.startsWith('/zh-hans') ? 'zh-hans' : 'en';
+    if (homeLink && currentLang !== 'en') homeLink.href = `/${currentLang}/`;
+</script>

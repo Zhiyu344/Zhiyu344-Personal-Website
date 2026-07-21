@@ -1,0 +1,301 @@
+---
+import '../styles/global.css';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { languages } from '../i18n/ui';
+
+interface Props {
+    title: string;
+    description?: string;
+}
+
+const { title, description = 'Zhiyu344 - Personal Website' } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const navLinks = [
+    { href: '/', key: 'nav.home' },
+    { href: '/projects', key: 'nav.projects' },
+    { href: '/blog', key: 'nav.blog' },
+    { href: '/about', key: 'nav.about' },
+] as const;
+
+// 生成语言切换链接：把当前路径的语言前缀替换掉
+const pathWithoutLang = Astro.url.pathname.replace(/^\/(zh-hans|zh-hant)/, '') || '/';
+function localizedPath(code: string) {
+    return code === 'en' ? pathWithoutLang : `/${code}${pathWithoutLang}`;
+}
+function navHref(href: string): string {
+    if (lang === 'en') return href;
+    return `/${lang}${href === '/' ? '' : href}`;
+}
+---
+
+<!doctype html>
+<html lang={lang} class="scroll-smooth">
+<head>
+    <script is:inline>
+        (function () {
+            const saved = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        import '../scripts/i18n.js';
+    </script>
+</head>
+<body class="bg-sky-50 dark:bg-abyss-950 text-night-800 dark:text-sky-50 font-sans antialiased min-h-screen flex flex-col transition-colors duration-300">
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-abyss-900/70 border-b border-sky-100 dark:border-abyss-700 transition-all duration-300">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <a id="logo-link" href={navHref('/')} class="text-2xl font-bold text-sky-600 dark:text-sky-200 hover:text-candle-500 dark:hover:text-candle-300 transition-colors duration-300">
+                        Zhiyu344
+                    </a>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-8" aria-label="Main navigation">
+                    {navLinks.map(link => (
+                        <a
+                            href={navHref(link.href)}
+                            data-nav-key={link.key}
+                            data-base-href={link.href}
+                            class="text-night-600 dark:text-sky-100 hover:text-candle-600 dark:hover:text-candle-300 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                        >
+                            {t(link.key)}
+                        </a>
+                    ))}
+                </nav>
+
+                <div class="hidden md:flex items-center gap-1 ml-4 border-l border-sky-100 dark:border-abyss-700 pl-4">
+                    <div class="relative">
+                        <button
+                            id="lang-button"
+                            type="button"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            class="flex items-center gap-1 px-3 py-2 rounded-full text-sm text-night-500 dark:text-sky-200 hover:bg-sky-100 dark:hover:bg-abyss-800 transition-colors"
+                        >
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18" />
+                            </svg>
+                            <span id="lang-label">{languages[lang]}</span>
+                        </button>
+                        <div
+                            id="lang-dropdown"
+                            class="hidden absolute right-0 mt-2 w-36 rounded-xl bg-white dark:bg-abyss-800 shadow-lg ring-1 ring-sky-100 dark:ring-abyss-700 overflow-hidden"
+                        >
+                            {Object.entries(languages).map(([code, label]) => (
+                                <a
+                                    href={localizedPath(code)}
+                                    data-lang-option={code}
+                                    onclick={`localStorage.setItem('preferred-lang','${code}')`}
+                                    class:list={[
+                                        'block px-4 py-2 text-sm transition-colors',
+                                        lang === code
+                                            ? 'bg-sky-50 dark:bg-abyss-700 text-candle-600 dark:text-candle-300 font-semibold'
+                                            : 'text-night-600 dark:text-sky-100 hover:bg-sky-50 dark:hover:bg-abyss-700'
+                                    ]}
+                                >
+                                    {label}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        aria-label="Toggle dark mode"
+                        class="theme-toggle-btn p-2 rounded-full text-night-500 dark:text-sky-200 hover:bg-sky-100 dark:hover:bg-abyss-800 transition-colors"
+                    >
+                        <svg class="h-5 w-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <svg class="h-5 w-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="md:hidden">
+                    <button
+                        type="button"
+                        id="mobile-menu-button"
+                        aria-label="Toggle menu"
+                        aria-expanded="false"
+                        class="text-night-600 dark:text-sky-200 hover:text-candle-600 p-2"
+                    >
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <nav id="mobile-menu" class="hidden md:hidden fixed left-0 right-0 top-16 z-40 bg-white/95 dark:bg-abyss-900/95 backdrop-blur-md border-b border-sky-100 dark:border-abyss-700 px-4 py-4 space-y-1 shadow-lg" aria-label="Mobile navigation">
+                {navLinks.map(link => (
+                    <a
+                        href={navHref(link.href)}
+                        data-nav-key={link.key}
+                        data-base-href={link.href}
+                        class="block text-night-600 dark:text-sky-100 hover:text-candle-600 dark:hover:text-candle-300 px-3 py-2 rounded-md text-base font-medium"
+                    >
+                        {t(link.key)}
+                    </a>
+                ))}
+
+                <div class="border-t border-sky-100 dark:border-abyss-700 mt-2 pt-2">
+                    <p class="px-3 text-xs text-night-400 dark:text-abyss-300 mb-1" data-i18n-key="menu.language">{t('menu.language')}</p>
+                    {Object.entries(languages).map(([code, label]) => (
+                        <a
+                            href={localizedPath(code)}
+                            data-lang-option={code}
+                            onclick={`localStorage.setItem('preferred-lang','${code}')`}
+                            class:list={[
+                                'block px-3 py-2 rounded-md text-sm',
+                                lang === code
+                                    ? 'text-candle-600 dark:text-candle-300 font-semibold'
+                                    : 'text-night-600 dark:text-sky-100'
+                            ]}
+                        >
+                            {label}
+                        </a>
+                    ))}
+                </div>
+
+                <button
+                    type="button"
+                    aria-label="Toggle dark mode"
+                    class="theme-toggle-btn w-full flex items-center gap-2 px-3 py-2 mt-2 border-t border-sky-100 dark:border-abyss-700 pt-3 text-sm text-night-600 dark:text-sky-100"
+                >
+                    <svg class="h-5 w-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg class="h-5 w-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    <span class="dark:hidden" data-i18n-key="menu.darkMode">{t('menu.darkMode')}</span>
+                    <span class="hidden dark:inline" data-i18n-key="menu.lightMode">{t('menu.lightMode')}</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <slot />
+    </main>
+
+    <footer class="bg-white/50 dark:bg-abyss-900/50 border-t border-sky-100 dark:border-abyss-700 mt-auto transition-colors duration-500">
+        <div class="max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-night-500 dark:text-abyss-300">
+                Copyright &copy; {new Date().getFullYear()} Zhiyu344. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        import { ui, languages, defaultLang, type Lang } from '../i18n/ui';
+        import * as OpenCC from 'opencc-js';
+
+        const converter = OpenCC.Converter({ from: 'cn', to: 'tw' });
+
+        function detectLang(path: string): Lang {
+            if (path.startsWith('/zh-hant')) return 'zh-hant';
+            if (path.startsWith('/zh-hans')) return 'zh-hans';
+            return defaultLang;
+        }
+
+        function translate(lang: Lang, key: string): string {
+            const sourceLang = lang === 'zh-hant' ? 'zh-hans' : lang;
+            const value = ui[sourceLang]?.[key] ?? ui[defaultLang][key];
+            return lang === 'zh-hant' ? converter(value) : value;
+        }
+
+        const realPath = window.location.pathname;
+        const realLang = detectLang(realPath);
+
+        document.documentElement.lang = realLang;
+
+        document.querySelectorAll<HTMLAnchorElement>('[data-nav-key]').forEach((el) => {
+            const key = el.dataset.navKey!;
+            el.textContent = translate(realLang, key);
+            const baseHref = el.dataset.baseHref!;
+            el.href = realLang === defaultLang ? baseHref : `/${realLang}${baseHref === '/' ? '' : baseHref}`;
+        });
+
+        document.querySelectorAll<HTMLElement>('[data-lang-option]').forEach((el) => {
+            const isCurrent = el.dataset.langOption === realLang;
+            el.classList.toggle('text-candle-600', isCurrent);
+            el.classList.toggle('dark:text-candle-300', isCurrent);
+            el.classList.toggle('font-semibold', isCurrent);
+        });
+
+        document.querySelectorAll<HTMLElement>('[data-i18n-key]').forEach((el) => {
+            const key = el.dataset.i18nKey!;
+            el.textContent = translate(realLang, key);
+        });
+
+        const langLabel = document.getElementById('lang-label');
+        if (langLabel) langLabel.textContent = languages[realLang];
+
+        const logo = document.getElementById('logo-link') as HTMLAnchorElement | null;
+        if (logo) logo.href = realLang === defaultLang ? '/' : `/${realLang}/`;
+
+        const menuBtn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        menuBtn?.addEventListener('click', () => {
+            const isHidden = menu?.classList.toggle('hidden');
+            menuBtn.setAttribute('aria-expanded', String(!isHidden));
+        });
+
+        const langBtn = document.getElementById('lang-button');
+        const langDropdown = document.getElementById('lang-dropdown');
+        langBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = langDropdown?.classList.toggle('hidden');
+            langBtn.setAttribute('aria-expanded', String(!isHidden));
+        });
+        document.addEventListener('click', (e) => {
+            if (
+                langDropdown &&
+                !langDropdown.classList.contains('hidden') &&
+                !langDropdown.contains(e.target as Node) &&
+                e.target !== langBtn
+            ) {
+                langDropdown.classList.add('hidden');
+                langBtn?.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
+        });
+        document.addEventListener('click', (e) => {
+            if (
+                menu &&
+                !menu.classList.contains('hidden') &&
+                !menu.contains(e.target as Node) &&
+                e.target !== menuBtn &&
+                !menuBtn?.contains(e.target as Node)
+            ) {
+                menu.classList.add('hidden');
+                menuBtn?.setAttribute('aria-expanded', 'false');
+            }
+        });
+    </script>
+</body>
+</html>
