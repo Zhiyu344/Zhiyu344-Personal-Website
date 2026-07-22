@@ -1,0 +1,57 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/Button.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ id }) => id.startsWith('en/'));
+  return posts.map(post => ({
+    params: { slug: post.id.replace('en/', '') },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={`${post.data.title} | Zhiyu344`} description={post.data.description}>
+  <div class="relative overflow-hidden py-20 sm:py-28">
+    <div class="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
+      <div class="absolute top-10 right-10 w-72 h-72 bg-candle-300/30 dark:bg-candle-400/10 rounded-full filter blur-3xl animate-float"></div>
+    </div>
+
+    <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/blog" class="text-sm text-abyss-600 dark:text-abyss-300 hover:text-candle-500 transition-colors">
+        &larr; {t('blog.backToBlog')}
+      </a>
+
+      <h1 class="mt-4 text-3xl sm:text-4xl font-extrabold text-night-900 dark:text-sky-50">
+        {post.data.title}
+      </h1>
+      <p class="mt-2 text-sm text-night-500 dark:text-abyss-300">
+        {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+      </p>
+
+      <div class="mt-10 prose prose-lg max-w-none
+                  prose-headings:text-night-900 prose-p:text-night-700 prose-strong:text-night-900
+                  prose-a:text-abyss-600 hover:prose-a:text-candle-500 prose-a:transition-colors
+                  prose-blockquote:border-candle-400 prose-blockquote:text-night-600
+                  prose-code:text-abyss-700 prose-code:bg-abyss-50
+                  dark:prose-invert dark:prose-headings:text-sky-50 dark:prose-p:text-abyss-200
+                  dark:prose-a:text-abyss-300 dark:hover:prose-a:text-candle-400
+                  dark:prose-blockquote:border-candle-500 dark:prose-blockquote:text-abyss-200
+                  dark:prose-code:text-sky-100 dark:prose-code:bg-abyss-800">
+        <Content />
+      </div>
+
+      <div class="mt-16 pt-8 border-t border-abyss-100 dark:border-abyss-700">
+        <Button href="/blog" variant="secondary">{t('blog.backToBlog')}</Button>
+      </div>
+    </article>
+  </div>
+</BaseLayout>

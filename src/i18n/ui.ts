@@ -23,6 +23,10 @@ export const ui = {
     '404.title': 'Page Not Found',
     '404.message': "The page you're looking for doesn't exist or has been moved.",
     '404.backHome': 'Back to Home',
+    'blog.pageTitle': 'Blog',
+    'blog.pageIntro': 'Thoughts on code, design, and things I\'m building.',
+    'blog.readMore': 'Read more',
+    'blog.backToBlog': 'Back to Blog',
   },
   'zh-hans': {
     'nav.home': '首页',
@@ -40,6 +44,10 @@ export const ui = {
     '404.title': '页面未找到',
     '404.message': '你访问的页面不存在，或者已经被移动了。',
     '404.backHome': '返回首页',
+    'blog.pageTitle': '博客',
+    'blog.pageIntro': '记录一些关于代码、设计和正在做的事情的想法。',
+    'blog.readMore': '阅读全文',
+    'blog.backToBlog': '返回博客',
   },
 } as const;
 

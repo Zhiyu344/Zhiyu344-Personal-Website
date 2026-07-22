@@ -1,17 +1,16 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import Button from './Button.astro';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<div class="relative overflow-hidden">
-	<div class="absolute inset-0 -z-20 bg-sky-50 dark:bg-abyss-950 transition-colors duration-500"></div>
-	<div class="absolute inset-0 -z-20 bg-gradient-to-br from-abyss-950 via-abyss-900 to-abyss-800 opacity-0 dark:opacity-100 transition-opacity duration-500"></div>
+<div class="relative overflow-hidden min-h-[85vh] flex items-center">
 	<!-- Hero Section -->
-	<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-32">
+	<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
     	<h1 class="text-4xl tracking-tight font-extrabold text-night-900 dark:text-sky-50 sm:text-5xl md:text-6xl">
     		<span class="block">{t('home.greeting')}</span>
-    		<span class="block mt-2 text-candle-500 dark:bg-gradient-to-r dark:from-abyss-300 dark:to-sky-200 dark:bg-clip-text dark:text-transparent">
+    		<span class="block mt-2 bg-gradient-to-r from-abyss-500 to-abyss-800 dark:from-abyss-300 dark:to-sky-200 bg-clip-text text-transparent">
 				{t('home.aka')}
 			</span>
     	</h1>
@@ -20,25 +19,19 @@ const t = useTranslations(lang);
 		</p>
 		<div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
 				<div class="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
-			<a
-				href={lang === 'en' ? '/projects' : `/${lang}/projects`}
-				class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-candle-500 hover:bg-candle-600 dark:bg-abyss-500 dark:hover:bg-abyss-400 md:py-4 md:text-lg md:px-10 transition-all duration-300 hover:-translate-y-1"
-			>
+			<Button href={lang === 'en' ? '/projects' : `/${lang}/projects`} variant="primary">
 				{t('home.viewProjects')}
-			</a>
-			<a
-				href={lang === 'en' ? '/blog' : `/${lang}/blog`}
-				class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-candle-700 dark:text-sky-100 bg-candle-100 dark:bg-abyss-800 hover:bg-candle-200 dark:hover:bg-abyss-700 md:py-4 md:text-lg md:px-10 transition-all duration-300 hover:-translate-y-1"
-			>
+			</Button>
+			<Button href={lang === 'en' ? '/blog' : `/${lang}/blog`} variant="secondary">
 				{t('home.readBlog')}
-			</a>
+			</Button>
 			</div>
 		</div>
     </div>
 
 	<div class="absolute top-0 left-1/2 transform -translate-x-1/2 -z-10 w-full h-full overflow-hidden pointer-events-none">
-		<div class="absolute top-10 left-10 w-72 h-72 bg-sky-200 dark:bg-abyss-400 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 dark:opacity-40 animate-float"></div>
-		<div class="absolute top-10 right-10 w-72 h-72 bg-candle-200 dark:bg-abyss-300 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 dark:opacity-30 animate-float" style="animation-delay: 2s;"></div>
-		<div class="absolute -bottom-8 left-20 w-72 h-72 bg-dusk-200 dark:bg-abyss-500 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 dark:opacity-30 animate-float" style="animation-delay: 4s;"></div>
-	</div>
+        <div class="absolute top-10 left-10 w-72 h-72 bg-candle-300/50 dark:bg-candle-400/25 rounded-full filter blur-3xl animate-float"></div>
+        <div class="absolute top-10 right-10 w-72 h-72 bg-dusk-300/40 dark:bg-dusk-400/20 rounded-full filter blur-3xl animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-candle-200/50 dark:bg-candle-300/20 rounded-full filter blur-3xl animate-float" style="animation-delay: 4s;"></div>
+    </div>
 </div>

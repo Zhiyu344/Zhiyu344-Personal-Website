@@ -55,12 +55,14 @@ function navHref(href: string): string {
         import '../scripts/i18n.js';
     </script>
 </head>
-<body class="bg-sky-50 dark:bg-abyss-950 text-night-800 dark:text-sky-50 font-sans antialiased min-h-screen flex flex-col transition-colors duration-300">
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-abyss-900/70 border-b border-sky-100 dark:border-abyss-700 transition-all duration-300">
+<body class="text-night-800 dark:text-sky-50 font-sans antialiased min-h-screen flex flex-col">
+    <div class="fixed inset-0 -z-50 bg-gradient-to-br from-abyss-50 via-abyss-100 to-sky-200 transition-opacity duration-500 dark:opacity-0"></div>
+    <div class="fixed inset-0 -z-50 bg-gradient-to-br from-abyss-950 via-abyss-900 to-abyss-800 opacity-0 transition-opacity duration-500 dark:opacity-100"></div>
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/60 dark:bg-abyss-900/70 border-b border-abyss-100 dark:border-abyss-700 transition-all duration-300">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0 flex items-center">
-                    <a id="logo-link" href={navHref('/')} class="text-2xl font-bold text-sky-600 dark:text-sky-200 hover:text-candle-500 dark:hover:text-candle-300 transition-colors duration-300">
+                    <a href={navHref('/')} class="text-2xl font-bold bg-gradient-to-r from-abyss-400 to-abyss-600 dark:from-sky-200 dark:to-abyss-200 bg-clip-text text-transparent hover:opacity-80 transition-opacity duration-300">
                         Zhiyu344
                     </a>
                 </div>
@@ -78,14 +80,14 @@ function navHref(href: string): string {
                     ))}
                 </nav>
 
-                <div class="hidden md:flex items-center gap-1 ml-4 border-l border-sky-100 dark:border-abyss-700 pl-4">
+                <div class="hidden md:flex items-center gap-1 ml-4 border-l border-abyss-100 dark:border-abyss-700 pl-4">
                     <div class="relative">
                         <button
                             id="lang-button"
                             type="button"
                             aria-haspopup="true"
                             aria-expanded="false"
-                            class="flex items-center gap-1 px-3 py-2 rounded-full text-sm text-night-500 dark:text-sky-200 hover:bg-sky-100 dark:hover:bg-abyss-800 transition-colors"
+                            class="flex items-center gap-1 px-3 py-2 rounded-full text-sm text-night-500 dark:text-sky-200 hover:bg-abyss-100 dark:hover:bg-abyss-800 transition-colors"
                         >
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18" />
@@ -94,7 +96,7 @@ function navHref(href: string): string {
                         </button>
                         <div
                             id="lang-dropdown"
-                            class="hidden absolute right-0 mt-2 w-36 rounded-xl bg-white dark:bg-abyss-800 shadow-lg ring-1 ring-sky-100 dark:ring-abyss-700 overflow-hidden"
+                            class="hidden absolute right-0 mt-2 w-36 rounded-xl bg-white dark:bg-abyss-800 shadow-lg ring-1 ring-abyss-100 dark:ring-abyss-700 overflow-hidden"
                         >
                             {Object.entries(languages).map(([code, label]) => (
                                 <a
@@ -192,11 +194,11 @@ function navHref(href: string): string {
         </div>
     </header>
 
-    <main class="flex-grow">
+    <main class="flex-grow flex flex-col">
         <slot />
     </main>
 
-    <footer class="bg-white/50 dark:bg-abyss-900/50 border-t border-sky-100 dark:border-abyss-700 mt-auto transition-colors duration-500">
+    <footer class="bg-white/50 dark:bg-abyss-900/50 border-t border-abyss-100 dark:border-abyss-700 mt-auto transition-colors duration-500">
         <div class="max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <p class="text-center text-sm text-night-500 dark:text-abyss-300">
                 Copyright &copy; {new Date().getFullYear()} Zhiyu344. All rights reserved.
