@@ -1,8 +1,10 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { marked } from 'marked';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Button from '../../../components/Button.astro';
 import { getLangFromUrl, useTranslations, formatDate } from '../../../i18n/utils';
+import { toTraditional } from '../../../i18n/opencc';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ id }) => id.startsWith('zh-hans/'));
@@ -13,25 +15,30 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const traditionalBody = toTraditional(post.body ?? '');
+const htmlContent = marked.parse(traditionalBody) as string;
+
+const title = toTraditional(post.data.title);
+const description = toTraditional(post.data.description);
 ---
 
-<BaseLayout title={`${post.data.title} | Zhiyu344`} description={post.data.description}>
+<BaseLayout title={`${title} | Zhiyu344`} description={description}>
   <div class="relative overflow-hidden py-20 sm:py-28">
     <div class="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
       <div class="absolute top-10 right-4 sm:right-10 w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 bg-candle-300/25 sm:bg-candle-300/30 dark:bg-candle-400/10 rounded-full filter blur-2xl md:blur-3xl animate-float"></div>
     </div>
 
     <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <a href="/zh-hans/blog" class="text-sm text-abyss-600 dark:text-abyss-300 hover:text-candle-500 transition-colors">
+      <a href="/zh-hant/blog" class="text-sm text-abyss-600 dark:text-abyss-300 hover:text-candle-500 transition-colors">
         &larr; {t('blog.backToBlog')}
       </a>
 
       <h1 class="mt-4 text-3xl sm:text-4xl font-extrabold text-night-900 dark:text-sky-50">
-        {post.data.title}
+        {title}
       </h1>
       <p class="mt-2 text-sm text-night-500 dark:text-abyss-300">
         {formatDate(post.data.pubDate, lang)}
@@ -45,12 +52,12 @@ const t = useTranslations(lang);
                   dark:prose-invert dark:prose-headings:text-sky-50 dark:prose-p:text-abyss-200
                   dark:prose-a:text-abyss-300 dark:hover:prose-a:text-candle-400
                   dark:prose-blockquote:border-candle-500 dark:prose-blockquote:text-abyss-200
-                  dark:prose-code:text-sky-100 dark:prose-code:bg-abyss-800">
-        <Content />
+                  dark:prose-code:text-sky-100 dark:prose-code:bg-abyss-800"
+           set:html={htmlContent}>
       </div>
 
       <div class="mt-16 pt-8 border-t border-abyss-100 dark:border-abyss-700">
-        <Button href="/zh-hans/blog" variant="secondary">{t('blog.backToBlog')}</Button>
+        <Button href="/zh-hant/blog" variant="secondary">{t('blog.backToBlog')}</Button>
       </div>
     </article>
   </div>

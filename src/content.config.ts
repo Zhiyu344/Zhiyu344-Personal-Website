@@ -14,4 +14,17 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const changelog = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/changelog' }),
+  schema: z.object({
+    date: z.coerce.date(),
+    changes: z.array(
+      z.object({
+        type: z.enum(['feature', 'fix', 'improvement', 'breaking']),
+        description: z.string(),
+      })
+    ),
+  }),
+});
+
+export const collections = { blog, changelog };

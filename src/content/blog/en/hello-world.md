@@ -1,10 +1,10 @@
 ---
 title: "Hello, World"
-description: "The first post on this new digital garden."
+description: "The first post on this new website."
 pubDate: 2026-07-22
-tags: ["meta", "sky"]
+tags: ["Meta"]
 ---
 
-Welcome to my corner of the internet. This site is inspired by the light of *Sky: Children of the Light* — a small digital garden where I share notes on code, open source, and whatever I'm tinkering with.
+Welcome to my corner of the internet. Style of this site is inspired by the light of *Sky: Children of the Light*.
 
 More posts coming soon.

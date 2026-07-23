@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations, formatDate } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const allEntries = await getCollection('changelog', ({ id }) => id.startsWith('en/'));
+const entries = allEntries.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const typeStyles: Record<string, string> = {
+  feature: 'bg-abyss-50 dark:bg-abyss-800 text-abyss-700 dark:text-abyss-200',
+  fix: 'bg-dusk-50 dark:bg-dusk-900/30 text-dusk-700 dark:text-dusk-200',
+  improvement: 'bg-candle-50 dark:bg-candle-900/20 text-candle-700 dark:text-candle-300',
+  breaking: 'bg-night-100 dark:bg-night-800 text-night-700 dark:text-night-200',
+};
+---
+
+<BaseLayout title={`${t('changelog.pageTitle')} | Zhiyu344`}>
+  <div class="relative overflow-hidden min-h-[85vh] py-20 sm:py-28">
+    <div class="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
+      <div class="absolute top-10 left-4 sm:left-10 w-[clamp(140px,32vw,288px)] h-[clamp(140px,32vw,288px)] bg-candle-300/30 sm:bg-candle-300/40 dark:bg-candle-400/15 rounded-full filter blur-2xl md:blur-3xl animate-float"></div>
+    </div>
+
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-night-900 dark:text-sky-50">
+        {t('changelog.pageTitle')}
+      </h1>
+      <p class="mt-3 text-base sm:text-lg text-night-600 dark:text-abyss-200">
+        {t('changelog.pageIntro')}
+      </p>
+
+      <ol class="mt-12 relative border-l-2 border-abyss-100 dark:border-abyss-700 space-y-12 pl-6">
+        {entries.map(entry => (
+          <li class="relative">
+            <span class="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-abyss-500 dark:bg-abyss-300 ring-4 ring-white dark:ring-abyss-950"></span>
+
+            <time class="text-base font-semibold text-abyss-700 dark:text-sky-50">
+              {formatDate(entry.data.date, lang)}
+            </time>
+
+            <ul class="mt-3 space-y-2">
+              {entry.data.changes.map(change => (
+                <li class="grid grid-cols-[4rem_1fr] sm:grid-cols-[5rem_1fr] gap-x-3 items-start">
+                  <span class={`text-xs px-2 py-0.5 rounded-full font-medium text-center ${typeStyles[change.type]}`}>
+                    {t(`changelog.type.${change.type}` as any)}
+                  </span>
+                  <span class="text-night-700 dark:text-abyss-100">{change.description}</span>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</BaseLayout>

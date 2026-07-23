@@ -3,8 +3,9 @@ interface Props {
     href: string;
     variant?: 'primary' | 'secondary';
     class?: string;
+    id?: string;
 }
-const { href, variant = 'primary', class: className = '' } = Astro.props;
+const { href, variant = 'primary', class: className = '', id } = Astro.props;
 
 const base = 'inline-flex items-center justify-center px-8 py-3 md:py-4 md:px-10 rounded-full text-base md:text-lg font-medium transition-all duration-300 hover:-translate-y-1';
 
@@ -13,6 +14,6 @@ const variants = {
     secondary: 'text-abyss-700 dark:text-sky-100 bg-abyss-50 dark:bg-abyss-800 hover:bg-abyss-100 dark:hover:bg-abyss-700',
 };
 ---
-<a href={href} class={`${base} ${variants[variant]} ${className}`}>
+<a href={href} id={id} class={`${base} ${variants[variant]} ${className}`}>
     <slot />
 </a>

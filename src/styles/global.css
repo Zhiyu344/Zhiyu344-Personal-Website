@@ -2,7 +2,7 @@
 @plugin "@tailwindcss/typography";
 @custom-variant dark (&:where(.dark, .dark *));
 @theme {
-  --font-sans: 'Nunito', 'HarmonyOS Sans SC', sans-serif;
+  --font-sans: 'Nunito', -apple-system, 'PingFang SC', 'Microsoft YaHei UI', sans-serif;
 
   --color-sky-50: #FDFCF5;
   --color-sky-100: #E0F7FA;

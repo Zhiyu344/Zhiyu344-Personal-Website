@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations, formatDate } from '../../i18n/utils';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ id }) => id.startsWith('en/'));
@@ -34,7 +34,7 @@ const t = useTranslations(lang);
         {post.data.title}
       </h1>
       <p class="mt-2 text-sm text-night-500 dark:text-abyss-300">
-        {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        {formatDate(post.data.pubDate, lang)}
       </p>
 
       <div class="mt-10 prose prose-lg max-w-none

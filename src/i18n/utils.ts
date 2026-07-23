@@ -1,7 +1,5 @@
-import * as OpenCC from 'opencc-js';
 import { ui, defaultLang, type UiKey, type Lang } from './ui';
-
-const converter = OpenCC.Converter({ from: 'cn', to: 'tw' });
+import { toTraditional } from './opencc';
 
 export function getLangFromUrl(url: URL): Lang {
   const [, lang] = url.pathname.split('/');
@@ -15,6 +13,18 @@ export function useTranslations(lang: Lang) {
 
   return function t(key: UiKey): string {
     const value = dict[key] ?? ui[defaultLang][key];
-    return lang === 'zh-hant' ? converter(value) : value;
+    return lang === 'zh-hant' ? toTraditional(value) : value;
   };
+}
+
+// src/i18n/utils.ts
+export function formatDate(date: Date, lang: Lang): string {
+  if (lang === 'en') {
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const formatted = `${year} 年 ${month} 月 ${day} 日`;
+  return lang === 'zh-hant' ? toTraditional(formatted) : formatted;
 }
